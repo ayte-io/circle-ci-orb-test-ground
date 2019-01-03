@@ -65,11 +65,12 @@ orbs:
 jobs:
   jabba:
     docker:
-      - image: circleci/ubuntu-server
+      - image: circleci/python
     environment:
-      BASH_ENV: /root/.bashrc
+      BASH_ENV: ~/.bashrc
     steps:
       - run: echo $HOME
+      - run: whoami
       - run: echo $BASH_ENV
       - run: 'type jabba || :'
       - run: ls -lsd ~
