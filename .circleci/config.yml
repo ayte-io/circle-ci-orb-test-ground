@@ -1,89 +1,69 @@
 version: '2.1'
 orbs:
-  jabba:
-    description: |
-      Installs Jabba (https://github.com/shyiko/jabba) and provides JDK
-      installation commands
+  allure:
+    version: '2.1'
+    description: Orb providing support for [Allure Framework](https://github.com/allure-framework/allure2)
     commands:
-      setup:
+      install:
+        description: Installs Allure Framework and registers it as /usr/local/bin/allure
         parameters:
           version:
+            description: Allure version to use
             type: string
-            default: latest
-        steps:
-          - run:
-              name: Installing Jabba version << parameters.version >>
-              command: 'curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash'
-              environment:
-                JABBA_VERSION: << parameters.version >>
-      install:
-        description: Installs specific JDK, which can be used later
+            default: 2.8.1
+          steps:
+            - run:
+                name: Allure archive download
+                command: curl -L https://dl.bintray.com/qameta/maven/io/qameta/allure/allure-commandline/<< parameters.version >>/allure-commandline-<< parameters.version >>.zip -o /tmp/allure.zip
+            - run:
+                name: Archive extraction
+                command: unzip /tmp/allure.zip
+            - run:
+                name: Allure installation
+                command: sudo mv allure-<< parameters.version >> /usr/local/share/allure
+            - run:
+                name: Allure binary symlinking
+                command: sudo ln -s /usr/local/share/allure/bin/allure /usr/local/bin/allure
+      report:
+        description: Generates report using Allure Framework
         parameters:
-          jdk:
-            description: JDK to be installed
+          configuration-path:
+            description: Path to Allure configuration, uses default one if omitted
             type: string
-        steps:
-          - run:
-              name: Installing JDK << parameters.jdk >>
-              command: jabba install '<< parameters.jdk >>
-      use:
-        parameters:
-          jdk:
-            description: JDK to be used after command execution
+            default: /usr/local/share/allure/config/allure.yml
+          target-path:
+            description: Where to emit report, `allure-report`
             type: string
+            default: allure-report
+          results-path:
+            type: string
+            default: allure-results
+          artifact-path:
+            type: string
+            default: Report/Allure
         steps:
           - run:
-              name: Asserting JDK << parameters.jdk >> is installed
-              command: jabba install '<< parameters.jdk >>'
-          - run:
-              name: Setting JDK << parameters.jdk >> as default
-              command: jabba alias default '<< parameters.jdk >>'
-      list:
-        description: Simply lists installed JDKs
-        steps:
-          - run:
-              name: Listing installed JDK
-              command: jabba ls
-      version:
-        description: Displays Jabba version
-        steps:
-          - run:
-              name: Querying Jabba version
-              command: jabba --version
-      current:
-        description: Displays JDK currently used by Jabba
-        steps:
-          - run:
-              name: Querying current JDK
-              command: jabba current
-      which:
-        description: Displays path to JDK currently used by Jabba
-        steps:
-          - run:
-              name: Querying current JDK installation path
-              command: jabba which
+              name: Allure report generation (<< parameters.results-path >> -> << parameters.target-path >>)
+              command: |
+                allure generate \
+                  --config << parameters.configuration-path >> \
+                  --report-dir << parameters.target-path >> \
+                  << parameters.results-path >>
+          - store_artifacts:
+              path: << parameters.target-path >>
+              destination: << parameters.artifact-path >>
+
 jobs:
-  jabba:
+  allure:
     docker:
-      - image: circleci/python
+      - image: circleci/openjdk-8
     environment:
       BASH_ENV: ~/.bashrc
     steps:
-      - run: echo $HOME
-      - run: whoami
-      - run: echo $BASH_ENV
-      - run: 'type jabba || :'
-      - run: ls -lsd ~
-      - jabba/setup
-      - run: cat ~/.jabba/jabba.sh
-      - run: cat "$BASH_ENV"
-      - run: '[ -s "/root/.jabba/jabba.sh" ] && echo true || echo false'
-      - run: source "~/.bashrc" && type jabba
-      - jabba/use:
-          jdk: zulu@1.8
-      - run: java -version
+      - allure/install
+      - allure/report
 
 workflows:
   default:
     jobs:
-      - jabba
+      - allure
