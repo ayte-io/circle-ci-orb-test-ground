@@ -81,9 +81,9 @@ jobs:
     docker:
       - image: circleci/ubuntu-server
     environment:
-      BASH_ENV: $HOME/.bashrc
+      BASH_ENV: ~/.bashrc
     steps:
-      - run: echo $SHELL
+      - run: echo $HOME
       - run: echo $BASH_ENV
       - run: 'type jabba || :'
       - run: ls -lsd ~
