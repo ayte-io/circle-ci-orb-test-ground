@@ -85,7 +85,7 @@ jobs:
     steps:
       - run: echo $SHELL
       - run: echo $BASH_ENV
-      - run: type jabba
+      - run: 'type jabba || :'
       - run: ls -lsd ~
       - run: source ~/.bashrc && type jabba
       - jabba/setup
