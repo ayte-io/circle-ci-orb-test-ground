@@ -87,9 +87,9 @@ jobs:
       - run: echo $BASH_ENV
       - run: 'type jabba || :'
       - run: ls -lsd ~
+      - jabba/setup
       - run: cat ~/.bashrc
       - run: source ~/.bashrc && type jabba
-      - jabba/setup
       - jabba/use:
           jdk: zulu@1.8
       - run: java -version
