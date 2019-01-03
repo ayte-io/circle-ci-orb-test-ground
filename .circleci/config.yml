@@ -90,6 +90,7 @@ jobs:
       - jabba/setup
       - run: cat ~/.jabba/jabba.sh
       - run: cat ~/.bashrc
+      - run: '[ -s "~/.jabba/jabba.sh" ] && echo true || echo false'
       - run: source "/root/.jabba/jabba.sh" && type jabba
       - jabba/use:
           jdk: zulu@1.8
