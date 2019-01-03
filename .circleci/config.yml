@@ -91,7 +91,7 @@ jobs:
       - run: cat ~/.jabba/jabba.sh
       - run: cat ~/.bashrc
       - run: '[ -s "/root/.jabba/jabba.sh" ] && echo true || echo false'
-      - run: source "/root/.jabba/jabba.sh" && type jabba
+      - run: source $BASH_ENV && type jabba
       - jabba/use:
           jdk: zulu@1.8
       - run: java -version
