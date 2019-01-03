@@ -88,6 +88,7 @@ jobs:
       - run: 'type jabba || :'
       - run: ls -lsd ~
       - jabba/setup
+      - run: cat ~/.jabba/jabba.sh
       - run: cat ~/.bashrc
       - run: source ~/.bashrc && type jabba
       - jabba/use:
