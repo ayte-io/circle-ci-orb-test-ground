@@ -1,8 +1,6 @@
 version: '2.1'
 orbs:
   allure:
-    version: '2.1'
-    description: Orb providing support for [Allure Framework](https://github.com/allure-framework/allure2)
     commands:
       install:
         description: Installs Allure Framework and registers it as /usr/local/bin/allure
