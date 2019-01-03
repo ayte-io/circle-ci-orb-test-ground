@@ -27,7 +27,7 @@ orbs:
               name: Installing JDK << parameters.jdk >>
               command: jabba install '<< parameters.jdk >>'
               environment:
-                BASH_ENV: ~/.bashrc
+                BASH_ENV: $HOME/.bashrc
       use:
         parameters:
           jdk:
@@ -81,7 +81,7 @@ jobs:
     docker:
       - image: circleci/ubuntu-server
     environment:
-      BASH_ENV: ~/.bashrc
+      BASH_ENV: $HOME/.bashrc
     steps:
       - run: echo $SHELL
       - run: echo $BASH_ENV
