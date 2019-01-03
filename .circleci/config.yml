@@ -70,7 +70,7 @@ jobs:
     steps:
       - jabba/setup
       - jabba/use:
-          version: zulu@1.8
+          jdk: zulu@1.8
       - run: java -version
 
 workflows:
