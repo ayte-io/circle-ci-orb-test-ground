@@ -1,0 +1,79 @@
+version: '2.1'
+orbs:
+  jabba:
+    description: |
+      Installs Jabba (https://github.com/shyiko/jabba) and provides JDK
+      installation commands
+    commands:
+      setup:
+        parameters:
+          version:
+            type: string
+            default: latest
+        steps:
+          - run:
+              name: Installing Jabba version << parameters.version >>
+              command: 'curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash'
+              environment:
+                JABBA_VERSION: << parameters.version >>
+      install:
+        description: Installs specific JDK, which can be used later
+        parameters:
+          jdk:
+            description: JDK to be installed
+            type: string
+        steps:
+          - run:
+              name: Installing JDK << parameters.jdk >>
+              command: jabba install '<< parameters.jdk >>'
+      use:
+        parameters:
+          jdk:
+            description: JDK to be used after command execution
+            type: string
+        steps:
+          - run:
+              name: Asserting JDK << parameters.jdk >> is installed
+              command: jabba install '<< parameters.jdk >>'
+          - run:
+              name: Setting JDK << parameters.jdk >> as default
+              command: jabba alias default '<< parameters.jdk >>'
+      list:
+        description: Simply lists installed JDKs
+        steps:
+          - run:
+              name: Listing installed JDK
+              command: jabba ls
+      version:
+        description: Displays Jabba version
+        steps:
+          - run:
+              name: Querying Jabba version
+              command: jabba --version
+      current:
+        description: Displays JDK currently used by Jabba
+        steps:
+          - run:
+              name: Querying current JDK
+              command: jabba current
+      which:
+        description: Displays path to JDK currently used by Jabba
+        steps:
+          - run:
+              name: Querying current JDK installation path
+              command: jabba which
+jobs:
+  jabba:
+    executor: circleci/ubuntu-server
+    environment:
+      BASH_ENV: ~/.bashrc
+    steps:
+      - jabba/setup
+      - jabba/use:
+          version: zulu@1.8
+      - run: java -version
+
+workflows:
+  default:
+    jobs:
+      - jabba
