@@ -64,7 +64,8 @@ orbs:
               command: jabba which
 jobs:
   jabba:
-    executor: circleci/ubuntu-server
+    docker:
+      - image: circleci/ubuntu-server
     environment:
       BASH_ENV: ~/.bashrc
     steps:
