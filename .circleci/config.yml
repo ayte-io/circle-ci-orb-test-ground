@@ -75,7 +75,7 @@ jobs:
       - run: ls -lsd ~
       - jabba/setup
       - run: cat ~/.jabba/jabba.sh
-      - run: cat ~/.bashrc
+      - run: cat "$BASH_ENV"
       - run: '[ -s "/root/.jabba/jabba.sh" ] && echo true || echo false'
       - run: source "~/.bashrc" && type jabba
       - jabba/use:
