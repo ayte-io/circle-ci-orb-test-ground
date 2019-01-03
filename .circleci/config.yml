@@ -83,6 +83,7 @@ jobs:
     environment:
       BASH_ENV: ~/.bashrc
     steps:
+      - run: echo $SHELL
       - jabba/setup
       - jabba/use:
           jdk: zulu@1.8
