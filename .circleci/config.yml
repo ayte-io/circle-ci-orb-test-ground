@@ -1,6 +1,8 @@
 version: '2.1'
 orbs:
   allure:
+    version: '2.1'
+    description: Orb providing support for [Allure Framework](https://github.com/allure-framework/allure2)
     commands:
       install:
         description: Installs Allure Framework and registers it as /usr/local/bin/allure
@@ -54,7 +56,7 @@ orbs:
 jobs:
   allure:
     docker:
-      - image: circleci/openjdk-8
+      - image: circleci/openjdk:11.0
     environment:
       BASH_ENV: ~/.bashrc
     steps:
