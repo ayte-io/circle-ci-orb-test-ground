@@ -26,6 +26,8 @@ orbs:
           - run:
               name: Installing JDK << parameters.jdk >>
               command: jabba install '<< parameters.jdk >>'
+              environment:
+                BASH_ENV: ~/.bashrc
       use:
         parameters:
           jdk:
@@ -35,33 +37,45 @@ orbs:
           - run:
               name: Asserting JDK << parameters.jdk >> is installed
               command: jabba install '<< parameters.jdk >>'
+              environment:
+                BASH_ENV: ~/.bashrc
           - run:
               name: Setting JDK << parameters.jdk >> as default
               command: jabba alias default '<< parameters.jdk >>'
+              environment:
+                BASH_ENV: ~/.bashrc
       list:
         description: Simply lists installed JDKs
         steps:
           - run:
               name: Listing installed JDK
               command: jabba ls
+              environment:
+                BASH_ENV: ~/.bashrc
       version:
         description: Displays Jabba version
         steps:
           - run:
               name: Querying Jabba version
               command: jabba --version
+              environment:
+                BASH_ENV: ~/.bashrc
       current:
         description: Displays JDK currently used by Jabba
         steps:
           - run:
               name: Querying current JDK
               command: jabba current
+              environment:
+                BASH_ENV: ~/.bashrc
       which:
         description: Displays path to JDK currently used by Jabba
         steps:
           - run:
               name: Querying current JDK installation path
               command: jabba which
+              environment:
+                BASH_ENV: ~/.bashrc
 jobs:
   jabba:
     docker:
