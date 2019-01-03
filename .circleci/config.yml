@@ -88,8 +88,9 @@ jobs:
       - run: 'type jabba || :'
       - run: ls -lsd ~
       - jabba/setup
+      - run: cat ~/.jabba/jabba.sh
       - run: cat ~/.bashrc
-      - run: source ~/.bashrc && type jabba
+      - run: source "/root/.jabba/jabba.sh" && type jabba
       - jabba/use:
           jdk: zulu@1.8
       - run: java -version
